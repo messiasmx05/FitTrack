@@ -289,8 +289,14 @@
         <div class="form-grid">
           <div class="form-group full">
             <label>Nome do exercício</label>
-            <input type="text" id="exName" placeholder="Supino reto" class="input-text" list="exerciseSuggestions" maxlength="100">
+            <div class="ex-name-input-wrapper">
+              <input type="text" id="exName" placeholder="Supino reto" class="input-text" list="exerciseSuggestions" maxlength="100" autocomplete="off">
+              <button type="button" class="btn-input-catalog" id="btnInputCatalog" title="Ver lista de exercícios" aria-label="Abrir catálogo">
+                <i class="ri-arrow-down-s-line"></i>
+              </button>
+            </div>
             <datalist id="exerciseSuggestions"></datalist>
+            <span class="form-hint"><i class="ri-information-line"></i> Digite ou toque na seta para ver as opções</span>
           </div>
           <div class="form-group">
             <label>Séries</label>

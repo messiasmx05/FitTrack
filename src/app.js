@@ -104,7 +104,7 @@ let homeDateLabel, homeGreetingTitle, homeHeroDesc, btnHomeStartWorkout, btnHome
 let homeTotalWorkouts, homeTotalVolume, homeActiveRoutineDays, homeTotalExercises;
 let homeRoutineSummary, homeTodaySummary, homeHistorySummary, homeEvolutionSummary;
 let timer;
-let btnOpenCatalog, catalogModalOverlay, catalogModal, btnCloseCatalog;
+let btnOpenCatalog, btnInputCatalog, catalogModalOverlay, catalogModal, btnCloseCatalog;
 let catalogSearchInput, catalogMuscleTabs, catalogExercisesGrid, muscleChips;
 let activeMuscleFilter = 'todos';
 let activeCatalogTab = 'todos';
@@ -227,6 +227,7 @@ function cacheDOMRefs() {
 
   // Catálogo e Filtros de Exercícios
   btnOpenCatalog = $('#btnOpenCatalog');
+  btnInputCatalog = $('#btnInputCatalog');
   catalogModalOverlay = $('#catalogModalOverlay');
   catalogModal = $('#catalogModal');
   btnCloseCatalog = $('#btnCloseCatalog');
@@ -519,7 +520,16 @@ function setupRoutinePage() {
   });
 
   // Integração com a Biblioteca / Catálogo Completo
-  btnOpenCatalog?.addEventListener('click', openCatalogModal);
+  btnOpenCatalog?.addEventListener('click', () => openCatalogModal(activeMuscleFilter));
+  btnInputCatalog?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openCatalogModal(activeMuscleFilter);
+  });
+  exNameInput?.addEventListener('click', () => {
+    if (!exNameInput.value) {
+      openCatalogModal(activeMuscleFilter);
+    }
+  });
   btnCloseCatalog?.addEventListener('click', closeCatalogModal);
   catalogModalOverlay?.addEventListener('click', (e) => {
     if (e.target === catalogModalOverlay) closeCatalogModal();
@@ -538,10 +548,10 @@ function setupRoutinePage() {
 }
 
 // ─── Modal do Catálogo de Exercícios ──────────
-function openCatalogModal() {
+function openCatalogModal(initialMuscle = 'todos') {
   if (!catalogModalOverlay) return;
   catalogModalOverlay.hidden = false;
-  activeCatalogTab = 'todos';
+  activeCatalogTab = initialMuscle || activeMuscleFilter || 'todos';
   if (catalogSearchInput) {
     catalogSearchInput.value = '';
     setTimeout(() => catalogSearchInput.focus(), 80);
@@ -1715,13 +1725,18 @@ async function startAuthentication() {
     onAuthSuccess: activateUser,
     showToast,
   });
-  authModal.show('login');
 
   try {
     const user = await checkAuthenticatedUser();
-    if (user) await activateUser(user);
+    if (user) {
+      await activateUser(user);
+    } else {
+      // Só exibe o modal de login se o usuário NÃO possuir sessão ativa
+      authModal.show('login');
+    }
   } catch (error) {
     console.error('Erro ao verificar a sessão:', error);
+    authModal.show('login');
     authModal.setError('Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.');
   }
 }

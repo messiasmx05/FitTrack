@@ -15,6 +15,7 @@
   vertical-align: middle;
   margin-left: 8px;
   line-height: 1.25;
+  white-space: nowrap;
 }
 
 .muscle-tag.muscle-peito {
@@ -69,7 +70,7 @@
 
 /* Filtro Rápido em Pílulas */
 .muscle-quick-filter {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .muscle-chips {
@@ -77,6 +78,7 @@
   gap: 8px;
   overflow-x: auto;
   padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
 }
 
@@ -91,6 +93,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  user-select: none;
 }
 
 .muscle-chip:hover {
@@ -106,18 +109,69 @@
   box-shadow: 0 4px 14px var(--primary-glow);
 }
 
+/* Wrapper de Input do Exercício com Botão de Seta / Catálogo */
+.ex-name-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ex-name-input-wrapper input.input-text {
+  padding-right: 46px !important;
+  width: 100%;
+  cursor: pointer;
+}
+
+.btn-input-catalog {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  background: rgba(108, 92, 231, 0.15);
+  border: 1px solid rgba(108, 92, 231, 0.3);
+  color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.btn-input-catalog:hover,
+.btn-input-catalog:active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.form-hint {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
 /* Modal do Catálogo Completo */
 .catalog-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.78);
+  background: rgba(0, 0, 0, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   z-index: 250;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
+  box-sizing: border-box;
   animation: fadeIn 0.2s ease;
 }
 
@@ -132,18 +186,20 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .catalog-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 22px 26px;
+  padding: 20px 24px;
   border-bottom: 1px solid var(--border);
+  gap: 12px;
 }
 
 .catalog-modal-header h3 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: #fff;
   display: flex;
@@ -156,19 +212,21 @@
 }
 
 .catalog-subtitle {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   margin-top: 4px;
+  line-height: 1.4;
 }
 
 .catalog-search-row {
-  padding: 16px 26px 8px;
+  padding: 14px 24px 8px;
 }
 
 .catalog-search-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .catalog-search-wrapper i {
@@ -176,6 +234,7 @@
   left: 14px;
   color: var(--text-muted);
   font-size: 1.1rem;
+  pointer-events: none;
 }
 
 .catalog-search-wrapper input {
@@ -187,6 +246,7 @@
   color: #fff;
   font-size: 0.92rem;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .catalog-search-wrapper input:focus {
@@ -198,9 +258,10 @@
 .catalog-muscle-tabs {
   display: flex;
   gap: 8px;
-  padding: 10px 26px;
+  padding: 10px 24px;
   overflow-x: auto;
   border-bottom: 1px solid var(--border);
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
 
@@ -218,6 +279,7 @@
   align-items: center;
   gap: 6px;
   white-space: nowrap;
+  user-select: none;
 }
 
 .catalog-muscle-tab:hover {
@@ -232,29 +294,29 @@
 }
 
 .catalog-exercises-grid {
-  padding: 20px 26px;
+  padding: 16px 24px 24px;
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-}
-
-@media (max-width: 600px) {
-  .catalog-exercises-grid {
-    grid-template-columns: 1fr;
-  }
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .catalog-item-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
+  padding: 12px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  gap: 10px;
 }
 
 .catalog-item-card:hover {
@@ -269,11 +331,12 @@
   flex-direction: column;
   gap: 4px;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .catalog-item-name {
   font-weight: 700;
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
@@ -281,11 +344,12 @@
 }
 
 .catalog-item-meta {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--text-muted);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 .catalog-item-add {
@@ -299,7 +363,6 @@
   justify-content: center;
   font-size: 1.1rem;
   flex-shrink: 0;
-  margin-left: 10px;
   transition: all 0.2s ease;
 }
 
@@ -307,4 +370,65 @@
   background: var(--primary);
   color: #fff;
   transform: scale(1.08);
+}
+
+/* ===================================================
+   RESPONSIVIDADE MOBILE (SMARTPHONES)
+   =================================================== */
+@media (max-width: 768px) {
+  .catalog-modal-overlay {
+    padding: 10px;
+  }
+
+  .catalog-modal {
+    max-height: 92vh;
+    border-radius: 16px;
+    width: 100%;
+  }
+
+  .catalog-modal-header {
+    padding: 16px 16px 12px;
+  }
+
+  .catalog-modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .catalog-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .catalog-search-row {
+    padding: 10px 16px 6px;
+  }
+
+  .catalog-muscle-tabs {
+    padding: 6px 16px 10px;
+    gap: 6px;
+  }
+
+  .catalog-muscle-tab {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+
+  .catalog-exercises-grid {
+    grid-template-columns: 1fr;
+    padding: 10px 14px 20px;
+    gap: 10px;
+  }
+
+  .catalog-item-card {
+    padding: 12px;
+    width: 100%;
+  }
+
+  .catalog-item-name {
+    font-size: 0.9rem;
+  }
+
+  .catalog-item-meta {
+    font-size: 0.74rem;
+    gap: 6px;
+  }
 }
