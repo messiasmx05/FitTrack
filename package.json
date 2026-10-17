@@ -23,6 +23,7 @@
     "express-session": "^1.19.0",
     "helmet": "^8.3.0",
     "pg": "^8.23.1",
+    "remixicon": "^4.9.1",
     "vite": "^6.4.4"
   }
 }
