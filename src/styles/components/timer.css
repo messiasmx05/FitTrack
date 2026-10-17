@@ -1,0 +1,299 @@
+/* CronÃ´metro principal; classes running/ending/finished refletem seu estado. */
+.rest-timer-card {
+  background: linear-gradient(145deg, #131320 0%, #171728 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin-bottom: 26px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.rest-timer-card.running {
+  border-color: rgba(108, 92, 231, 0.65);
+  box-shadow: 0 8px 36px var(--primary-glow);
+}
+
+.rest-timer-card.ending {
+  border-color: rgba(253, 203, 110, 0.85);
+  box-shadow: 0 8px 36px rgba(253, 203, 110, 0.25);
+  animation: timerPulse 0.8s infinite alternate;
+}
+
+.rest-timer-card.finished {
+  border-color: rgba(0, 184, 148, 0.85);
+  box-shadow: 0 8px 36px var(--success-glow);
+}
+
+@keyframes timerPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.006); }
+}
+
+.timer-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.timer-info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--primary-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timer-info-badge i {
+  font-size: 1.15rem;
+}
+
+.timer-quick-presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-preset {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-preset:hover {
+  background: var(--bg-card-hover);
+  color: var(--text);
+  border-color: var(--primary-light);
+}
+
+.btn-preset.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+
+.timer-display-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.timer-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+#timerSecondsDisplay {
+  font-size: 4.2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #ffffff 30%, #a29bfe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.rest-timer-card.ending #timerSecondsDisplay {
+  background: linear-gradient(180deg, #ffffff 30%, #fdcb6e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rest-timer-card.finished #timerSecondsDisplay {
+  background: linear-gradient(180deg, #ffffff 30%, #00b894 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.timer-unit {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary-light);
+  margin-left: 4px;
+}
+
+.timer-progress-wrap {
+  width: 100%;
+}
+
+.timer-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.timer-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.rest-timer-card.ending .timer-progress-bar {
+  background: linear-gradient(90deg, #e17055 0%, #fdcb6e 100%);
+}
+
+.rest-timer-card.finished .timer-progress-bar {
+  background: linear-gradient(90deg, #009975 0%, #00b894 100%);
+}
+
+.timer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-timer-action {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-timer-action:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--primary-light);
+  color: #fff;
+}
+
+.btn-timer-reset:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn-timer-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--primary-glow);
+  transition: all var(--transition);
+  min-width: 130px;
+  justify-content: center;
+}
+
+.btn-timer-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 6px 20px var(--primary-glow);
+  transform: translateY(-1px);
+}
+
+.btn-timer-primary.is-paused {
+  background: var(--warning);
+  color: #12121a;
+  box-shadow: 0 4px 16px rgba(253, 203, 110, 0.3);
+}
+
+/* Atalho flutuante do cronÃ´metro, visÃ­vel ao navegar para fora da tela de treino. */
+.floating-timer {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  background: rgba(18, 18, 28, 0.94);
+  border: 1px solid var(--primary);
+  border-radius: 40px;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.7), 0 0 24px var(--primary-glow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: fadeIn 0.3s ease;
+}
+
+.floating-timer-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.floating-timer-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, #5846db 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 10px var(--primary-glow);
+}
+
+.floating-timer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.floating-timer-label {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1;
+}
+
+.floating-timer-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.floating-timer-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+

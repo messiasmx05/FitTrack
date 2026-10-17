@@ -1,0 +1,35 @@
+/* ==========================================
+   FitTrack â€” estilos da interface em tema escuro.
+   As variÃ¡veis em :root centralizam cores, tamanhos e transiÃ§Ãµes reutilizÃ¡veis.
+   ========================================== */
+
+:root {
+  --bg: #0b0b12;
+  --bg-card: rgba(18, 18, 28, 0.85);
+  --bg-card-hover: rgba(26, 26, 42, 0.95);
+  --bg-input: #141420;
+  --bg-sidebar: #0e0e17;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.05);
+  --text: #f0f0f8;
+  --text-muted: #8e8ea6;
+  --text-dim: #5c5c78;
+  --primary: #6c5ce7;
+  --primary-light: #a29bfe;
+  --primary-dark: #5846db;
+  --primary-glow: rgba(108, 92, 231, 0.35);
+  --success: #00b894;
+  --success-dark: #009975;
+  --success-glow: rgba(0, 184, 148, 0.3);
+  --warning: #fdcb6e;
+  --danger: #ff7675;
+  --danger-dark: #d63031;
+  --danger-glow: rgba(255, 118, 117, 0.25);
+  --sidebar-width: 250px;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-xs: 7px;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 50px rgba(0, 0, 0, 0.6);
+  --transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}

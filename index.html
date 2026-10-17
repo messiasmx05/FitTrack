@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitTrack — Sua Evolução Começa Aqui</title>
+  <!-- Folha de estilos e bibliotecas externas usadas pela interface. -->
+  <link rel="stylesheet" href="./style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Navegação lateral para telas grandes. data-page indica ao JavaScript
+       qual seção deve ser exibida ao clicar em cada botão. -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <i class="ri-flashlight-fill"></i>
+      <span>FitTrack</span>
+    </div>
+
+    <!-- Perfil do Usuário Conectado -->
+    <div class="user-profile-badge" id="userProfileBadge" hidden>
+      <div class="user-profile-info">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <div class="user-details">
+          <span class="user-name" id="userName">Usuário</span>
+          <span class="user-email" id="userEmail">usuario@email.com</span>
+        </div>
+      </div>
+      <button class="btn-logout" id="btnLogout" title="Sair da conta" aria-label="Sair da conta">
+        <i class="ri-logout-box-r-line"></i>
+      </button>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li>
+        <button class="nav-btn active" data-page="inicio">
+          <i class="ri-home-5-line"></i>
+          <span>Início</span>
+        </button>
+      </li>
+      <li>
+        <button class="nav-btn" data-page="rotina">
+          <i class="ri-calendar-schedule-line"></i>
+          <span>Rotina</span>
+        </button>
+      </li>
+      <li>
+        <button class="nav-btn" data-page="treino">
+          <i class="ri-boxing-line"></i>
+          <span>Treino do Dia</span>
+        </button>
+      </li>
+      <li>
+        <button class="nav-btn" data-page="historico">
+          <i class="ri-history-line"></i>
+          <span>Histórico</span>
+        </button>
+      </li>
+      <li>
+        <button class="nav-btn" data-page="evolucao">
+          <i class="ri-line-chart-line"></i>
+          <span>Evolução</span>
+        </button>
+      </li>
+    </ul>
+    <div class="sidebar-footer">
+      <button class="nav-btn" id="btnExport">
+        <i class="ri-download-2-line"></i>
+        <span>Exportar Dados</span>
+      </button>
+      <button class="nav-btn" id="btnImport">
+        <i class="ri-upload-2-line"></i>
+        <span>Importar Dados</span>
+      </button>
+      <!-- Campo oculto aberto pelo botão Importar Dados; recebe backups JSON. -->
+      <input type="file" id="importFile" accept=".json" hidden>
+    </div>
+  </nav>
+
+  <!-- A mesma navegação em formato compacto para telas móveis. -->
+  <nav class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-btn active" data-page="inicio">
+      <i class="ri-home-5-line"></i>
+      <span>Início</span>
+    </button>
+    <button class="mobile-nav-btn" data-page="rotina">
+      <i class="ri-calendar-schedule-line"></i>
+      <span>Rotina</span>
+    </button>
+    <button class="mobile-nav-btn" data-page="treino">
+      <i class="ri-boxing-line"></i>
+      <span>Treino</span>
+    </button>
+    <button class="mobile-nav-btn" data-page="historico">
+      <i class="ri-history-line"></i>
+      <span>Histórico</span>
+    </button>
+    <button class="mobile-nav-btn" data-page="evolucao">
+      <i class="ri-line-chart-line"></i>
+      <span>Evolução</span>
+    </button>
+    <button class="mobile-nav-btn" id="btnMobileLogout" title="Sair da conta" style="color: var(--danger);">
+      <i class="ri-logout-box-r-line"></i>
+      <span>Sair</span>
+    </button>
+  </nav>
+
+  <!-- Contém as páginas; o JavaScript alterna a classe active para exibir uma. -->
+  <main class="main-content">
+
+    <!-- Início: resumo do treino de hoje, estatísticas e atalhos para cada área. -->
+    <section class="page active" id="page-inicio">
+      <!-- Destaque principal; a mensagem muda conforme a rotina programada. -->
+      <div class="home-hero-card">
+        <div class="home-hero-content">
+          <div class="home-hero-badge">
+            <i class="ri-flashlight-fill"></i>
+            <span id="homeDateLabel">Hoje</span>
+          </div>
+          <h1 id="homeGreetingTitle">Bora treinar hoje? 💪</h1>
+          <p class="home-hero-desc" id="homeHeroDesc">
+            Carregando sua rotina do dia...
+          </p>
+          <div class="home-hero-actions">
+            <button class="btn btn-primary btn-lg" id="btnHomeStartWorkout">
+              <i class="ri-play-fill"></i> Iniciar Treino de Hoje
+            </button>
+            <button class="btn btn-ghost" id="btnHomeViewRoutine">
+              <i class="ri-calendar-schedule-line"></i> Ver Minha Rotina
+            </button>
+          </div>
+        </div>
+        <div class="home-hero-icon-graphic">
+          <i class="ri-boxing-fill"></i>
+        </div>
+      </div>
+
+      <!-- Indicadores calculados com os dados armazenados no navegador. -->
+      <div class="home-stats-grid">
+        <div class="home-stat-item">
+          <div class="home-stat-icon purple"><i class="ri-calendar-check-line"></i></div>
+          <div class="home-stat-info">
+            <span class="home-stat-number" id="homeTotalWorkouts">0</span>
+            <span class="home-stat-label">Treinos Concluídos</span>
+          </div>
+        </div>
+        <div class="home-stat-item">
+          <div class="home-stat-icon emerald"><i class="ri-scales-3-line"></i></div>
+          <div class="home-stat-info">
+            <span class="home-stat-number" id="homeTotalVolume">0 kg</span>
+            <span class="home-stat-label">Volume Total</span>
+          </div>
+        </div>
+        <div class="home-stat-item">
+          <div class="home-stat-icon blue"><i class="ri-list-check-3"></i></div>
+          <div class="home-stat-info">
+            <span class="home-stat-number" id="homeActiveRoutineDays">0 dias</span>
+            <span class="home-stat-label">Rotina Semanal</span>
+          </div>
+        </div>
+        <div class="home-stat-item">
+          <div class="home-stat-icon orange"><i class="ri-trophy-line"></i></div>
+          <div class="home-stat-info">
+            <span class="home-stat-number" id="homeTotalExercises">0</span>
+            <span class="home-stat-label">Exercícios Salvos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cartões clicáveis (data-jump) que levam diretamente às outras páginas. -->
+      <div class="home-section-title">
+        <h2>Como o FitTrack funciona</h2>
+        <p>Acesse rapidamente as ferramentas para turbinar sua evolução</p>
+      </div>
+
+      <div class="home-features-grid">
+        <!-- Atalho para planejar e editar os exercícios da semana. -->
+        <div class="home-feature-card" data-jump="rotina">
+          <div class="home-feature-header">
+            <div class="home-feature-icon purple"><i class="ri-calendar-schedule-line"></i></div>
+            <span class="home-feature-tag">Planejamento</span>
+          </div>
+          <h3>1. Rotina Semanal</h3>
+          <p>Monte seu plano para cada dia da semana com séries, repetições, carga inicial e tempo de descanso customizado.</p>
+          <div class="home-feature-footer">
+            <span id="homeRoutineSummary">0 exercícios cadastrados</span>
+            <span class="home-feature-arrow"><i class="ri-arrow-right-line"></i></span>
+          </div>
+        </div>
+
+        <!-- Atalho para executar o treino e usar o cronômetro. -->
+        <div class="home-feature-card highlight" data-jump="treino">
+          <div class="home-feature-header">
+            <div class="home-feature-icon emerald"><i class="ri-boxing-line"></i></div>
+            <span class="home-feature-tag active">Ao Vivo</span>
+          </div>
+          <h3>2. Treino & Cronômetro</h3>
+          <p>Dashboard de execução: o exercício atual fica em foco grande, com cronômetro em segundos e avanço automático ao finalizar.</p>
+          <div class="home-feature-footer">
+            <span id="homeTodaySummary">Ver treino de hoje</span>
+            <span class="home-feature-arrow"><i class="ri-arrow-right-line"></i></span>
+          </div>
+        </div>
+
+        <!-- Atalho para consultar sessões já finalizadas. -->
+        <div class="home-feature-card" data-jump="historico">
+          <div class="home-feature-header">
+            <div class="home-feature-icon blue"><i class="ri-history-line"></i></div>
+            <span class="home-feature-tag">Registros</span>
+          </div>
+          <h3>3. Histórico de Treinos</h3>
+          <p>Consulte todos os seus treinos já finalizados com data, volume total em kg levantado e detalhes de cada série.</p>
+          <div class="home-feature-footer">
+            <span id="homeHistorySummary">Ver histórico</span>
+            <span class="home-feature-arrow"><i class="ri-arrow-right-line"></i></span>
+          </div>
+        </div>
+
+        <!-- Atalho para comparar métricas do exercício ao longo do tempo. -->
+        <div class="home-feature-card" data-jump="evolucao">
+          <div class="home-feature-header">
+            <div class="home-feature-icon orange"><i class="ri-line-chart-line"></i></div>
+            <span class="home-feature-tag">Métricas</span>
+          </div>
+          <h3>4. Evolução de Cargas</h3>
+          <p>Gráficos interativos para acompanhar seu ganho de força, volume e cargas máximas ao longo das semanas.</p>
+          <div class="home-feature-footer">
+            <span id="homeEvolutionSummary">Ver gráficos</span>
+            <span class="home-feature-arrow"><i class="ri-arrow-right-line"></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rotina: escolhe um dia, nomeia o treino e organiza seus exercícios. -->
+    <section class="page" id="page-rotina">
+      <header class="page-header">
+        <div>
+          <h1>Minha Rotina Semanal</h1>
+          <p class="subtitle">Monte seu plano de treino para cada dia da semana</p>
+        </div>
+      </header>
+
+      <!-- data-day usa os índices do JavaScript: 0=domingo até 6=sábado. -->
+      <div class="day-tabs" id="dayTabs">
+        <button class="day-tab active" data-day="1">Seg</button>
+        <button class="day-tab" data-day="2">Ter</button>
+        <button class="day-tab" data-day="3">Qua</button>
+        <button class="day-tab" data-day="4">Qui</button>
+        <button class="day-tab" data-day="5">Sex</button>
+        <button class="day-tab" data-day="6">Sáb</button>
+        <button class="day-tab" data-day="0">Dom</button>
+      </div>
+
+      <!-- Nome opcional para identificar o foco do treino deste dia. -->
+      <div class="day-label-row" id="dayLabelRow">
+        <label>Rótulo do dia:</label>
+        <input type="text" id="dayLabel" placeholder="Ex: Peito e Tríceps" class="input-text day-label-input">
+      </div>
+
+      <!-- Lista dinâmica: os cartões são criados pelo JavaScript a partir da rotina. -->
+      <div class="exercise-list" id="routineExerciseList">
+      </div>
+
+      <!-- Formulário de exercício: séries, repetições, carga e descanso. -->
+      <div class="add-exercise-card" id="addExerciseCard">
+        <div class="add-exercise-header">
+          <h3><i class="ri-add-circle-line"></i> Adicionar Exercício</h3>
+          <button type="button" class="btn btn-ghost btn-sm" id="btnOpenCatalog">
+            <i class="ri-book-3-line"></i> Explorar Biblioteca
+          </button>
+        </div>
+
+        <!-- Filtro Rápido por Grupo Muscular -->
+        <div class="muscle-quick-filter" id="muscleQuickFilter">
+          <div class="muscle-chips" id="muscleChipsContainer">
+            <button type="button" class="muscle-chip active" data-muscle="todos">Todos</button>
+            <button type="button" class="muscle-chip" data-muscle="peito">Peito</button>
+            <button type="button" class="muscle-chip" data-muscle="costas">Costas</button>
+            <button type="button" class="muscle-chip" data-muscle="pernas">Pernas</button>
+            <button type="button" class="muscle-chip" data-muscle="ombros">Ombros</button>
+            <button type="button" class="muscle-chip" data-muscle="bracos">Braços</button>
+            <button type="button" class="muscle-chip" data-muscle="core">Abdômen</button>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Nome do exercício</label>
+            <input type="text" id="exName" placeholder="Supino reto" class="input-text" list="exerciseSuggestions" maxlength="100">
+            <datalist id="exerciseSuggestions"></datalist>
+          </div>
+          <div class="form-group">
+            <label>Séries</label>
+            <input type="number" id="exSets" value="3" min="1" max="100" class="input-text">
+          </div>
+          <div class="form-group">
+            <label>Repetições</label>
+            <input type="text" id="exReps" value="12" placeholder="12 ou 8-12" class="input-text" maxlength="20">
+          </div>
+          <div class="form-group">
+            <label>Carga inicial (kg)</label>
+            <input type="number" id="exWeight" min="0" step="0.5" placeholder="0" class="input-text">
+          </div>
+          <div class="form-group">
+            <label>Descanso (seg)</label>
+            <input type="number" id="exRest" value="60" min="1" max="3600" step="5" class="input-text">
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnAddExercise">
+          <i class="ri-add-line"></i> Adicionar
+        </button>
+      </div>
+    </section>
+
+    <!-- Treino: registra séries do dia escolhido e acompanha seu andamento. -->
+    <section class="page" id="page-treino">
+      <header class="page-header">
+        <div>
+          <h1>Treino do Dia</h1>
+          <p class="subtitle" id="treinoSubtitle">Registre suas cargas e séries de hoje</p>
+        </div>
+        <div class="page-header-actions">
+          <select id="workoutDaySelect" class="input-text workout-day-select" title="Selecione o dia do treino">
+            <option value="0">Domingo</option>
+            <option value="1">Segunda</option>
+            <option value="2">Terça</option>
+            <option value="3">Quarta</option>
+            <option value="4">Quinta</option>
+            <option value="5">Sexta</option>
+            <option value="6">Sábado</option>
+          </select>
+          <span class="badge" id="treinoDayBadge"></span>
+        </div>
+      </header>
+
+      <!-- Barra e contador atualizados conforme os exercícios são concluídos. -->
+      <div class="workout-progress-panel" id="workoutProgressPanel" hidden>
+        <div class="workout-progress-header">
+          <span class="workout-progress-title"><i class="ri-fire-fill"></i> Progresso do Treino</span>
+          <span class="workout-progress-count" id="workoutProgressCount">0 de 0 concluídos (0%)</span>
+        </div>
+        <div class="workout-progress-track">
+          <div class="workout-progress-fill" id="workoutProgressFill"></div>
+        </div>
+      </div>
+
+      <!-- Cronômetro principal, com durações rápidas, ajustes e controles. -->
+      <div class="rest-timer-card" id="restTimerCard">
+        <div class="timer-top-row">
+          <div class="timer-info-badge">
+            <i class="ri-timer-flash-line"></i>
+            <span id="timerStatusLabel">Cronômetro de Descanso</span>
+          </div>
+          <div class="timer-quick-presets">
+            <button class="btn-preset" data-seconds="30">30s</button>
+            <button class="btn-preset" data-seconds="45">45s</button>
+            <button class="btn-preset active" data-seconds="60">60s</button>
+            <button class="btn-preset" data-seconds="90">90s</button>
+            <button class="btn-preset" data-seconds="120">120s</button>
+          </div>
+        </div>
+
+        <div class="timer-display-wrap">
+          <div class="timer-display">
+            <span id="timerSecondsDisplay">60</span><span class="timer-unit">s</span>
+          </div>
+          <div class="timer-progress-wrap">
+            <div class="timer-progress-track">
+              <div class="timer-progress-bar" id="timerProgressBar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-controls">
+          <button class="btn btn-timer-action" id="btnTimerMinus" title="Diminuir 15 segundos">
+            <i class="ri-subtract-line"></i> -15s
+          </button>
+          <button class="btn btn-timer-primary" id="btnTimerToggle">
+            <i class="ri-play-fill" id="btnTimerToggleIcon"></i> <span id="btnTimerToggleText">Iniciar</span>
+          </button>
+          <button class="btn btn-timer-action" id="btnTimerPlus" title="Adicionar 15 segundos">
+            <i class="ri-add-line"></i> +15s
+          </button>
+          <button class="btn btn-timer-action" id="btnTimerPlus30" title="Adicionar 30 segundos">
+            <i class="ri-add-line"></i> +30s
+          </button>
+          <button class="btn btn-timer-action btn-timer-reset" id="btnTimerReset" title="Reiniciar descanso">
+            <i class="ri-restart-line"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="workout-exercises" id="workoutExercises">
+      </div>
+
+      <div class="workout-actions" id="workoutActions" hidden>
+        <button class="btn btn-success btn-lg" id="btnFinishWorkout">
+          <i class="ri-check-double-line"></i> Finalizar Treino
+        </button>
+      </div>
+
+      <div class="empty-state" id="treinoEmpty">
+        <i class="ri-calendar-close-line"></i>
+        <h3>Nenhum exercício para hoje</h3>
+        <p>Adicione exercícios na aba Rotina para este dia da semana.</p>
+      </div>
+    </section>
+
+    <!-- Histórico: sessões concluídas, detalhes e ação para excluir um registro. -->
+    <section class="page" id="page-historico">
+      <header class="page-header">
+        <div>
+          <h1>Histórico de Treinos</h1>
+          <p class="subtitle">Todos os seus treinos registrados</p>
+        </div>
+      </header>
+
+      <div class="history-list" id="historyList">
+      </div>
+
+      <div class="empty-state" id="historicoEmpty">
+        <i class="ri-inbox-line"></i>
+        <h3>Nenhum treino registrado</h3>
+        <p>Finalize um treino na aba "Treino do Dia" para vê-lo aqui.</p>
+      </div>
+    </section>
+
+    <!-- Evolução: compara cargas e volumes registrados em diferentes sessões. -->
+    <section class="page" id="page-evolucao">
+      <header class="page-header">
+        <div>
+          <h1>Evolução</h1>
+          <p class="subtitle">Acompanhe sua progressão de cargas</p>
+        </div>
+      </header>
+
+      <div class="evolution-controls">
+        <div class="form-group">
+          <label>Exercício</label>
+          <select id="evoExerciseSelect" class="input-text">
+            <option value="">Selecione um exercício</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Métrica</label>
+          <select id="evoMetricSelect" class="input-text">
+            <option value="maxWeight">Carga máxima</option>
+            <option value="totalVolume">Volume total (kg × reps)</option>
+            <option value="avgWeight">Carga média</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Resumo numérico atualizado para o exercício e a métrica selecionados. -->
+      <div class="stats-cards" id="statsCards" hidden>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ri-trophy-line"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statRecord">—</span>
+            <span class="stat-label">Recorde</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ri-arrow-up-circle-line"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statProgress">—</span>
+            <span class="stat-label">Progresso</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="ri-bar-chart-2-line"></i></div>
+          <div class="stat-info">
+            <span class="stat-value" id="statSessions">—</span>
+            <span class="stat-label">Sessões</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-container" id="chartContainer" hidden>
+        <canvas id="evolutionChart"></canvas>
+      </div>
+
+      <div class="empty-state" id="evolucaoEmpty">
+        <i class="ri-line-chart-line"></i>
+        <h3>Selecione um exercício</h3>
+        <p>Escolha um exercício acima para visualizar sua evolução ao longo do tempo.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Cronômetro compacto, exibido durante a navegação quando estiver em uso. -->
+  <div class="floating-timer" id="floatingTimer" hidden>
+    <div class="floating-timer-glow"></div>
+    <div class="floating-timer-main">
+      <div class="floating-timer-icon"><i class="ri-timer-line"></i></div>
+      <div class="floating-timer-info">
+        <span class="floating-timer-label" id="floatingTimerLabel">Descanso</span>
+        <span class="floating-timer-val" id="floatingTimerVal">60s</span>
+      </div>
+    </div>
+    <div class="floating-timer-actions">
+      <button class="btn-icon btn-sm" id="btnFloatingToggle" title="Pausar / Retomar">
+        <i class="ri-pause-line" id="btnFloatingToggleIcon"></i>
+      </button>
+      <button class="btn-icon btn-sm" id="btnFloatingAdd15" title="+15 segundos">
+        <span style="font-size: 0.75rem; font-weight: 700;">+15</span>
+      </button>
+      <button class="btn-icon btn-sm danger" id="btnFloatingClose" title="Cancelar cronômetro">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Destino das mensagens breves de sucesso e erro criadas pelo JavaScript. -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Janela reutilizada para confirmações e edição de exercícios. -->
+  <div class="modal-overlay" id="modalOverlay" hidden>
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Modal</h3>
+        <button class="btn-icon" id="modalClose"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <!-- Catálogo / Biblioteca de Exercícios por Grupo Muscular -->
+  <div class="catalog-modal-overlay" id="catalogModalOverlay" hidden>
+    <div class="catalog-modal" id="catalogModal">
+      <div class="catalog-modal-header">
+        <div>
+          <h3><i class="ri-book-3-line"></i> Biblioteca de Exercícios</h3>
+          <p class="catalog-subtitle">Selecione um exercício para preencher automaticamente com as séries e descanso recomendados</p>
+        </div>
+        <button class="btn-icon" id="btnCloseCatalog"><i class="ri-close-line"></i></button>
+      </div>
+
+      <div class="catalog-search-row">
+        <div class="catalog-search-wrapper">
+          <i class="ri-search-line"></i>
+          <input type="text" id="catalogSearchInput" placeholder="Buscar exercício por nome (ex: supino, remada, agachamento)..." autocomplete="off">
+        </div>
+      </div>
+
+      <div class="catalog-muscle-tabs" id="catalogMuscleTabs">
+        <!-- Criado dinamicamente -->
+      </div>
+
+      <div class="catalog-exercises-grid" id="catalogExercisesGrid">
+        <!-- Criado dinamicamente -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Tela de Autenticação (Login e Cadastro) com bloqueio em tela cheia -->
+  <div class="auth-overlay" id="authOverlay" hidden></div>
+
+  <!-- Vite carrega o ponto de entrada e resolve os módulos JavaScript/CSS. -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

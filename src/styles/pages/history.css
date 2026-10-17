@@ -1,0 +1,138 @@
+/* Lista e cartÃµes expansÃ­veis do histÃ³rico de sessÃµes salvas. */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.history-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all var(--transition);
+}
+
+.history-card:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.history-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.history-card-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.history-card-header .date-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.history-card-header .date-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--primary-glow) 0%, rgba(108, 92, 231, 0.12) 100%);
+  border: 1px solid rgba(108, 92, 231, 0.35);
+  border-radius: var(--radius-sm);
+  min-width: 54px;
+}
+
+.date-badge .day-num {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--primary-light);
+  line-height: 1;
+}
+
+.date-badge .month {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.history-card-header .workout-meta h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.history-card-header .workout-meta p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
+.history-card-header .expand-icon {
+  color: var(--text-dim);
+  font-size: 1.3rem;
+  transition: transform var(--transition);
+}
+
+.history-card.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+
+.history-card-body {
+  display: none;
+  padding: 0 22px 18px;
+  border-top: 1px solid var(--border-light);
+}
+
+.history-card.expanded .history-card-body {
+  display: block;
+}
+
+.history-exercise {
+  padding: 14px 0;
+}
+
+.history-exercise + .history-exercise {
+  border-top: 1px solid var(--border-light);
+}
+
+.history-exercise h5 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--primary-light);
+}
+
+.history-sets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.history-set-chip {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.history-actions {
+  padding: 14px 22px 18px;
+  display: flex;
+  justify-content: flex-end;
+}
+

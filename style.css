@@ -1,0 +1,2 @@
+/* Compatibilidade: os estilos agora são organizados em src/styles/. */
+@import './src/styles/main.css';

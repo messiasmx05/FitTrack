@@ -1,0 +1,13 @@
+/* Importa os estilos na mesma ordem em que apareciam na folha original. */
+@import './variables.css';
+@import './base.css';
+@import './layout.css';
+@import './pages/home.css';
+@import './pages/routine.css';
+@import './components/timer.css';
+@import './pages/workout.css';
+@import './pages/history.css';
+@import './pages/evolution.css';
+@import './components/base.css';
+@import './components/auth.css';
+@import './components/catalog.css';
