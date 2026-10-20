@@ -994,13 +994,14 @@ function renderTreinoPage() {
         ? { ...existingSet, done: Boolean(existingSet.done) }
         : { weight: exercise.weight || 0, reps: defaultReps, done: false };
     });
+    const allSetsDone = sets.length > 0 && sets.every(set => set.done);
     return {
       exerciseId: exercise.id,
       name: exercise.name,
       targetSets: exercise.sets,
       targetReps: exercise.reps,
       rest: exercise.rest || 60,
-      completed: sets.length > 0 && sets.every(set => set.done),
+      completed: Boolean(previous?.completed) && allSetsDone,
       sets,
     };
   });
@@ -1043,10 +1044,9 @@ function renderTreinoPage() {
 
   workout.forEach((exData, exIdx) => {
     const isFocused = (exIdx === focusedExerciseIndex);
-    const isCompleted = exData.sets.length > 0 && exData.sets.every(s => s.done);
-
-    // Considera concluído o exercício cujas séries já foram todas marcadas.
-    exData.completed = isCompleted;
+    const allSetsDone = exData.sets.length > 0 && exData.sets.every(s => s.done);
+    if (!allSetsDone) exData.completed = false;
+    const isCompleted = Boolean(exData.completed);
 
     const card = document.createElement('div');
 
@@ -1083,8 +1083,8 @@ function renderTreinoPage() {
       card.innerHTML = `
         <div class="workout-ex-header">
           <div class="ex-title">
-            <span class="ex-number" style="${isCompleted ? 'background: var(--success); color: #fff;' : ''}">
-              ${isCompleted ? '<i class="ri-check-line"></i>' : exIdx + 1}
+            <span class="ex-number${isCompleted || allSetsDone ? ' done' : ''}">
+              ${isCompleted || allSetsDone ? '<i class="ri-check-line"></i>' : exIdx + 1}
             </span>
             <div>
               <h4>${escapeHtml(exData.name)} ${getMuscleBadgeHtml(exData.name)}</h4>
@@ -1106,9 +1106,11 @@ function renderTreinoPage() {
             ? `<button class="btn-reopen-exercise" data-reopen-idx="${exIdx}">
                  <i class="ri-restart-line"></i> Reabrir Exercício
                </button>`
-            : `<button class="btn-finish-exercise" data-finish-idx="${exIdx}">
-                 <i class="ri-checkbox-circle-fill"></i> Finalizar Exercício
-               </button>`}
+            : allSetsDone
+              ? `<button class="btn-finish-exercise" data-finish-idx="${exIdx}">
+                   <i class="ri-checkbox-circle-fill"></i> Finalizar Exercício
+                 </button>`
+              : ''}
         </div>`;
 
       // Mantém os valores digitados sincronizados com o estado temporário.
@@ -1139,9 +1141,10 @@ function renderTreinoPage() {
             showToast(`Série ${si + 1} concluída! Descanso iniciado (${workout[ei].rest}s)`, 'success');
           }
 
-          // Marca o exercício como concluído se todas as séries foram feitas.
-          workout[ei].completed = workout[ei].sets.length > 0
-            && workout[ei].sets.every(s => s.done);
+          // Se desmarcar alguma série, garante que o exercício volte para não finalizado.
+          if (!workout[ei].sets.every(s => s.done)) {
+            workout[ei].completed = false;
+          }
 
           renderTreinoPage();
         });
@@ -1198,7 +1201,7 @@ function renderTreinoPage() {
       card.innerHTML = `
         <div class="workout-ex-header" title="Clique para rever ou editar">
           <div class="ex-title">
-            <span class="ex-number" style="background: var(--success); color: #fff;">
+            <span class="ex-number done">
               <i class="ri-check-line"></i>
             </span>
             <div>
