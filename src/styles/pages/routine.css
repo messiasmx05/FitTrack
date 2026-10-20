@@ -307,10 +307,11 @@ select.input-text {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-  transition: all var(--transition);
+  background: var(--bg-card-solid);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  transition: transform var(--transition), border-color var(--transition), background-color var(--transition);
+  content-visibility: auto;
+  contain-intrinsic-size: 0 88px;
   cursor: grab;
 }
 
@@ -399,8 +400,7 @@ select.input-text {
   border: 1px dashed rgba(108, 92, 231, 0.35);
   border-radius: var(--radius);
   padding: 26px 28px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--bg-card-solid);
   transition: border-color var(--transition);
 }
 

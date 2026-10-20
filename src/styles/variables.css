@@ -6,6 +6,7 @@
 :root {
   --bg: #0b0b12;
   --bg-card: rgba(18, 18, 28, 0.85);
+  --bg-card-solid: #13131d;
   --bg-card-hover: rgba(26, 26, 42, 0.95);
   --bg-input: #141420;
   --bg-sidebar: #0e0e17;
