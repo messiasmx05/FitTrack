@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 import argon2 from 'argon2';
+import compression from 'compression';
 import connectPgSimple from 'connect-pg-simple';
 import express from 'express';
 import session from 'express-session';
@@ -31,6 +32,7 @@ if (isProduction) app.set('trust proxy', 1);
 
 const PgSession = connectPgSimple(session);
 app.disable('x-powered-by');
+app.use(compression());
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -311,7 +313,16 @@ app.use('/api', (_req, res) => {
 });
 
 const distDirectory = resolve(directory, '../dist');
-app.use(express.static(distDirectory, { index: false, maxAge: isProduction ? '1h' : 0 }));
+app.use(express.static(distDirectory, {
+  index: false,
+  maxAge: isProduction ? '1y' : 0,
+  immutable: isProduction,
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html') || filePath.endsWith('manifest.json') || filePath.endsWith('sw.js')) {
+      res.setHeader('Cache-Control', 'no-cache');
+    }
+  }
+}));
 app.get(/.*/, (_req, res) => {
   res.sendFile(resolve(distDirectory, 'index.html'));
 });

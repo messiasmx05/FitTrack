@@ -16,6 +16,7 @@
   "dependencies": {
     "argon2": "^0.45.1",
     "chart.js": "^4.4.1",
+    "compression": "^1.8.2",
     "connect-pg-simple": "^10.0.0",
     "dotenv": "^18.0.8",
     "express": "^5.3.0",

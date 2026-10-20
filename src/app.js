@@ -3,7 +3,28 @@
    Os dados do usuário autenticado são carregados da API do servidor.
    ========================================== */
 
-import Chart from 'chart.js/auto';
+import {
+  Chart,
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Filler,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+Chart.register(
+  LineController,
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Filler,
+  Tooltip,
+  Legend
+);
 import { createAuthModal } from './components/AuthModal.js';
 import {
   checkAuthenticatedUser,

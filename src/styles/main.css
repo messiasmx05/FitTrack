@@ -1,5 +1,5 @@
 /* Importa os estilos na mesma ordem em que apareciam na folha original. */
-@import 'remixicon/fonts/remixicon.css';
+@import './remixicon-optimized.css';
 @import './variables.css';
 @import './base.css';
 @import './layout.css';
