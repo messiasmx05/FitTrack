@@ -7,9 +7,8 @@
   border-radius: var(--radius);
   padding: 16px 22px;
   margin-bottom: 24px;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  background: var(--bg-card-solid);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 .workout-progress-header {
@@ -62,14 +61,14 @@
 
 /* CartÃµes do treino; classes modificadoras representam foco, conclusÃ£o ou fila. */
 .workout-ex-card {
-  background: var(--bg-card);
+  background: var(--bg-card-solid);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+  content-visibility: auto;
+  contain-intrinsic-size: 0 110px;
 }
 
 /* ExercÃ­cio atual: cartÃ£o expandido para editar e concluir cada sÃ©rie. */

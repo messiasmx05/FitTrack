@@ -100,7 +100,7 @@
 }
 
 .home-stat-item {
-  background: var(--bg-card);
+  background: var(--bg-card-solid);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   padding: 18px 16px;

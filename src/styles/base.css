@@ -21,7 +21,7 @@ body {
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(108, 92, 231, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(0, 184, 148, 0.06) 0%, transparent 40%);
-  background-attachment: fixed;
+  background-attachment: scroll;
   color: var(--text);
   min-height: 100vh;
   display: flex;
