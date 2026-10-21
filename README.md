@@ -1,53 +1,148 @@
-# FitTrack
+<div align="center">
 
-Aplicativo web para planejar treinos, registrar sessões e acompanhar a evolução.
+  <img src="public/icon-192.png" alt="FitTrack Logo" width="88" height="88" />
 
-## Como executar
+  # ⚡ FitTrack
 
-1. Instale o [Node.js](https://nodejs.org/).
-2. Crie um PostgreSQL local e copie `.env.example` para `.env`; preencha `DATABASE_URL` e `SESSION_SECRET` (mínimo de 32 caracteres).
-3. Execute `npm install` na primeira vez.
-4. Execute `npm run dev` e abra `http://localhost:3000`. Esse comando inicia a API e o Vite.
+  **Sua Evolução Começa Aqui — Planejamento de Rotinas, Execução de Treinos e Análise de Carga**
 
-Para gerar a versão de produção, execute `npm run build`. O servidor Express (`npm start`) serve a pasta `dist/` e a API no mesmo domínio.
+  [![Live Demo](https://img.shields.io/badge/🌐_Acessar_App-fittrack--voo9.onrender.com-6c5ce7?style=for-the-badge)](https://fittrack-voo9.onrender.com)
+  [![PWA Ready](https://img.shields.io/badge/📱_PWA-Instalável-00b894?style=for-the-badge)](#)
+  [![Node.js](https://img.shields.io/badge/Node.js-24.x-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+  [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://supabase.com/)
+  [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 
-Use `npm run dev` para executar a interface e a API juntas. O Live Server e a abertura direta de `index.html` não funcionam com a autenticação, pois as chamadas à API precisam passar pelo proxy do Vite.
+</div>
 
-## Organização
+---
 
-- `index.html`: estrutura das telas.
-- `src/main.js`: entrada JavaScript da aplicação.
-- `style.css`: ponto de entrada dos estilos, carregado pelo HTML.
-- `src/app.js`: coordena as páginas, navegação e fluxo principal.
-- `src/data/`: validação e importação/exportação de dados.
-- `src/services/api.js`: comunicação HTTP com a API no mesmo domínio.
-- `src/services/userData.js`: leitura e gravação dos treinos pelo servidor.
-- `src/services/auth.js`: validação de formulários, chamadas de cadastro/login e migração de dados locais antigos.
-- `src/services/legacyDb.js`: migração de dados da versão antiga baseada em IndexedDB.
-- `src/components/`: componentes reutilizáveis, como o cronômetro e a interface de autenticação.
-- `src/utils/`: constantes e funções auxiliares.
-- `src/styles/`: folha de estilos dividida por layout, página e componente.
-- `server/index.js`: API Express, sessões, autenticação, proteção de rotas e servidor de produção.
-- `server/db.js`: conexão e criação das tabelas do PostgreSQL.
+## 📖 Sobre o Projeto
 
-## Contas e armazenamento
+O **FitTrack** é uma aplicação web Full-Stack e **PWA (Progressive Web App)** desenvolvida para praticantes de musculação que buscam controle preciso sobre seus treinos sem depender de planilhas ou blocos de notas.
 
-O cadastro, login e dados do FitTrack são processados no servidor Express e armazenados no PostgreSQL. As senhas são derivadas com Argon2id; não são salvas em texto puro. A sessão usa um cookie `HttpOnly`, `Secure` em produção e `SameSite=Lax`. As requisições que alteram dados verificam a origem. O servidor aplica limite de tentativas de autenticação e valida os dados antes de persistir.
+Com uma interface moderna em tema escuro (*Dark Mode*), responsiva tanto para **Desktop** quanto para **Celular**, o FitTrack permite planejar divisões semanais, controlar o descanso entre séries em tempo real e visualizar gráficos detalhados de progressão de carga e volume.
 
-O backend local exige PostgreSQL. Em produção, defina `NODE_ENV=production`, `DATABASE_URL`, um `SESSION_SECRET` aleatório com pelo menos 32 caracteres e `APP_ORIGIN` com a origem HTTPS exata do site (sem barra no final). Defina `DATABASE_SSL=true` apenas quando o provedor exigir TLS e apresentar um certificado confiável; conexões internas privadas do Render normalmente usam `DATABASE_SSL=false`. Use uma hospedagem Node que execute o servidor Express e um PostgreSQL gerenciado com armazenamento persistente. O endpoint `/api/health` verifica se o banco está acessível.
+🔗 **Acesse agora:** [https://fittrack-voo9.onrender.com](https://fittrack-voo9.onrender.com)
 
-No primeiro cadastro remoto neste navegador, dados antigos compatíveis no `localStorage` ou na conta local ativa do IndexedDB são enviados para a nova conta e validados pelo servidor. A migração é marcada como concluída para evitar copiar os mesmos dados pessoais para outra conta criada depois neste navegador. Antes de trocar de domínio, exporte um backup: o IndexedDB é isolado por origem e não pode ser lido automaticamente por outro domínio.
+---
 
-### Publicar com Render e PostgreSQL
+## ✨ Principais Funcionalidades
 
-1. Envie o projeto para um repositório Git privado.
-2. No Render, crie um PostgreSQL gerenciado e um Web Service Node ligado ao repositório.
-3. Configure o comando de build como `npm ci && npm run build` e o comando de inicialização como `npm start`.
-4. No serviço web, configure `DATABASE_URL` com a URL interna do PostgreSQL, `DATABASE_SSL=false`, `NODE_ENV=production` e `SESSION_SECRET` como um segredo aleatório. Configure `APP_ORIGIN` com a origem HTTPS exata do domínio Render (ou domínio próprio), sem barra final.
-5. Aguarde `/api/health` retornar `{"status":"ok"}` antes de abrir o site.
+- 📅 **Rotina Semanal Personalizável:**
+  - Organização de treinos de Segunda a Domingo com rótulos customizados (ex: *Treino A — Peito e Tríceps*).
+  - Catálogo interativo de exercícios separados por grupo muscular (**Peito, Costas, Pernas, Ombros, Braços e Core**).
+  - Reordenação rápida de exercícios via *Drag & Drop*.
 
-Não publique `.env` nem coloque `DATABASE_URL`/`SESSION_SECRET` em código, Git ou configurações do cliente. Faça backup do PostgreSQL e use um plano que mantenha os dados persistentes.
+- 🔥 **Modo Treino ao Vivo & Cronômetro Inteligente:**
+  - Destaque automático no exercício em execução, mantendo os próximos na fila e os concluídos compactados.
+  - Registro individual de carga (`kg`) e repetições por série.
+  - **Cronômetro flutuante de descanso** que dispara automaticamente ao concluir cada série, com alerta sonoro ao término.
 
-## JavaScript e TypeScript
+- 📈 **Gráficos de Evolução e Métricas:**
+  - Acompanhamento visual com **Chart.js** por exercício específico.
+  - Três métricas analíticas: **Carga Máxima (Recorde Pessoal / PR)**, **Volume Total da Sessão ($Séries \times Reps \times Carga$)** e **Carga Média**.
 
-O projeto continua escrito em JavaScript. TypeScript não foi ativado; comentários JSDoc podem documentar os dados e ajudar ferramentas como o VS Code a sugerir propriedades e detectar alguns erros, sem exigir que você aprenda uma sintaxe nova agora.
+- 🗂️ **Histórico Completo & Backup:**
+  - Registro cronológico de todas as sessões finalizadas com cálculo automático de tonelagem.
+  - Exportação e importação de dados em formato `.json` para backup seguro.
+
+- 🔐 **Autenticação e Sincronização em Nuvem:**
+  - Sistema próprio de contas com senhas criptografadas via **Argon2id**.
+  - Sessões persistentes em banco de dados **PostgreSQL**, permitindo acessar seus treinos de qualquer dispositivo.
+
+- 📱 **Instalável como Aplicativo (PWA):**
+  - Suporte nativo para instalação na tela inicial do **Android, iOS e Desktop**, funcionando em tela cheia como um app nativo.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### **Front-end**
+- **HTML5 & CSS3 Moderno:** Design responsivo com variáveis CSS, *Grid/Flexbox* e aceleração de renderização (`content-visibility`).
+- **JavaScript (ES6+ Modules):** Arquitetura limpa, modular e sem sobrecarga de frameworks pesados.
+- **Chart.js:** Renderização de gráficos interativos com *tree-shaking* otimizado.
+- **Remixicon:** Pacote de ícones vetoriais empacotado localmente para carregamento instantâneo.
+- **Vite:** Bundler de alta velocidade para build de produção.
+
+### **Back-end & Segurança**
+- **Node.js & Express 5:** API RESTful rápida com compressão HTTP (*Gzip/Brotli*) integrada.
+- **PostgreSQL (Supabase):** Persistência relacional e armazenamento JSONB de alta performance com *Row Level Security (RLS)*.
+- **Argon2 (`argon2id`):** Algoritmo estado-da-arte para hashing seguro de senhas.
+- **Express-Session & Connect-PG-Simple:** Gerenciamento de sessões autenticadas via cookies `HttpOnly`, `Secure` e `SameSite=Lax`.
+- **Helmet & Express-Rate-Limit:** Proteção de cabeçalhos HTTP (CSP) e prevenção contra ataques de força bruta.
+
+---
+
+## 📂 Estrutura do Projeto
+
+```text
+FitTrack/
+├── public/                  # Manifesto PWA, Service Worker (sw.js) e ícones do app
+├── server/
+│   ├── db.js                # Pool de conexão PostgreSQL e inicialização de tabelas
+│   └── index.js             # Servidor Express, rotas de API, autenticação e segurança
+├── src/
+│   ├── components/          # Componentes modulares (AuthModal, Timer de descanso)
+│   ├── data/                # Normalização de schemas e importação/exportação JSON
+│   ├── services/            # Clientes de comunicação com a API (auth, userData)
+│   ├── styles/              # Arquitetura CSS dividida por páginas, layout e componentes
+│   ├── utils/               # Catálogo de exercícios, constantes e helpers de DOM/áudio
+│   ├── app.js               # Controlador principal de estado e navegação SPA
+│   └── main.js              # Ponto de entrada e registro do Service Worker
+├── index.html               # Estrutura principal da interface
+├── package.json             # Dependências e scripts de automação
+└── vite.config.js           # Configuração de build e proxy de desenvolvimento
+```
+
+---
+
+## 🚀 Como Executar Localmente
+
+### **Pré-requisitos**
+- [Node.js](https://nodejs.org/) (v20 ou superior)
+- Um banco de dados **PostgreSQL** (local ou gratuito no [Supabase](https://supabase.com/))
+
+### **Passo a passo**
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/messiasmx05/FitTrack.git
+   cd FitTrack
+   ```
+
+2. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+3. **Configure as variáveis de ambiente:**
+   Copie o arquivo `.env.example` para `.env` e preencha os dados do seu banco:
+   ```env
+   PORT=3001
+   NODE_ENV=development
+   DATABASE_URL=postgresql://usuario:senha@localhost:5432/fittrack
+   DATABASE_SSL=false
+   SESSION_SECRET=sua_chave_secreta_com_pelo_menos_32_caracteres
+   ```
+
+4. **Inicie o ambiente de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+   O comando iniciará simultaneamente o servidor da API (`porta 3001`) e o servidor Vite (`http://localhost:3000`).
+
+5. **Build para Produção:**
+   ```bash
+   npm run build
+   npm start
+   ```
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido com dedicação por **Gabriel Messias**.
+
+<div align="center">
+  <sub>Se este projeto foi útil para você, deixe uma ⭐ no repositório!</sub>
+</div>
